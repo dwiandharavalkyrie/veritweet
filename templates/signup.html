@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>Create Account</h1>
+            <form id="signupForm">
+                <input type="text" id="username" placeholder="username" required>
+                <input type="email" id="email" placeholder="email" required>
+                <input type="password" id="password" placeholder="password" required>
+                <button type="submit">Create Account</button>
+            </form>
+            <p>Already have an account? <a href="/login">Log In</a></p>
+        </div>
+        <div class="banner">
+            <img src="{{ url_for('static', filename='assets/banner.png') }}" alt="Banner">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Ambil data dari form
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Kirim data ke backend
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.message === "User created successfully!") {
+                    window.location.href = "/login"; // Redirect ke halaman login
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

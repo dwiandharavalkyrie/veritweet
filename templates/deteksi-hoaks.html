@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritweet - Deteksi Hoaks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/deteksi-hoaks.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <h1>VERITWEET</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home_page') }}">HOME</a></li>
+                <li><a href="#deteksi-hoaks">DETEKSI HOAKS</a></li>
+                <li><a href="#about">ABOUT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="deteksi-hoaks-container">
+            <div class="deteksi-hoaks-header">
+                <img src="{{ url_for('static', filename='assets/search.png') }}" alt="Magnifier" class="magnifier-icon">
+                <h2>VERITWEET</h2>
+                <p>Validasi berita sebelum anda membacanya</p>
+            </div>
+            <form class="deteksi-hoaks-form" id="hoaksForm">
+                <label for="tweetContent">Masukkan Konten Tweet:</label>
+                <textarea id="tweetContent" rows="6" placeholder="Masukkan konten tweet di sini..." required></textarea>
+                <button type="submit" class="btn-cek-sekarang">Cek Sekarang</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-left">
+            <p>VERITWEET</p>
+        </div>
+        <div class="footer-center">
+            <p>&copy; 2025 – Dwi Andhara Valkyrie</p>
+        </div>
+        <div class="footer-right social-icons">
+            <a href="https://www.instagram.com/ra.valkyrie/" target="_blank">
+                <img src="{{ url_for('static', filename='assets/instagram.png') }}" alt="Instagram">
+            </a>
+            <a href="https://www.twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='assets/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="mailto:your-email@gmail.com">
+                <img src="{{ url_for('static', filename='assets/gmail.png') }}" alt="Gmail">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('hoaksForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const tweetContent = document.getElementById('tweetContent').value;
+
+            // Kirim data ke backend untuk deteksi hoaks
+            fetch('/api/deteksi-hoaks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: tweetContent })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || "Hasil berhasil diproses!");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat memproses.');
+            });
+        });
+    </script>
+</body>
+</html>
